@@ -149,7 +149,7 @@ export default ({
             self.attribute.hovered = false;
             Utils.timeout(popupTimeout, () => {
                 if (!self.attribute.hovered) {
-                    // destroyWithAnims();
+                    destroyWithAnims();
                 }
             })
         })
