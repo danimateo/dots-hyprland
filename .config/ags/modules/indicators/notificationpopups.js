@@ -28,6 +28,7 @@ export default () => Box({
             box.attribute.map.delete(id);
 
             const notif = Notifications.getNotification(id);
+            // notif.body = notif.body.replace(/<a.*?>(.*?)<\/a>/g, '');
             const newNotif = Notification({
                 notifObject: notif,
                 isPopup: true,
