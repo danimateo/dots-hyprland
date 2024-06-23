@@ -6,7 +6,7 @@ import Notification from '../.commonwidgets/notification.js';
 
 export default () => Box({
     vertical: true,
-    hpack: 'center',
+    hpack: 'end',
     className: 'osd-notifs spacing-v-5-revealer',
     attribute: {
         'map': new Map(),

@@ -12,7 +12,7 @@ export default (monitor = 0) => Widget.Window({
     layer: 'overlay',
     // exclusivity: 'ignore',
     visible: true,
-    anchor: ['top'],
+    anchor: ['top', 'right'],
     child: Widget.EventBox({
         onHover: () => { //make the widget hide when hovering
             Indicator.popup(-1);
