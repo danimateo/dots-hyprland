@@ -105,7 +105,7 @@ let configOptions = {
         'pages': {
             'order': ["apis", "tools"],
             'apis': {
-                'order': ["gemini", "gpt", "waifu", "booru"],
+                'order': ["gpt", "gemini"],
             }
         },
     },

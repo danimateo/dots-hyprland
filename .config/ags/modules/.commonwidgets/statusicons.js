@@ -100,6 +100,7 @@ const BluetoothDevices = () => Widget.Box({
     className: 'spacing-h-5',
     setup: self => self.hook(Bluetooth, self => {
         self.children = Bluetooth.connected_devices.map((device) => {
+            console.log(device);
             return Widget.Box({
                 className: 'bar-bluetooth-device spacing-h-5',
                 vpack: 'center',
@@ -189,6 +190,7 @@ export const NetworkIndicator = () => Widget.Stack({
         'wired': NetworkWiredIndicator(),
     },
     setup: (self) => self.hook(Network, stack => {
+        console.log(Network);
         if (!Network.primary) {
             stack.shown = 'wifi';
             return;
@@ -287,7 +289,7 @@ export const StatusIcons = (props = {}) => Widget.Box({
             MicMuteIndicator(),
             optionalKeyboardLayoutInstance,
             NotificationIndicator(),
-            NetworkIndicator(),
+            // NetworkIndicator(),
             Widget.Box({
                 className: 'spacing-h-5',
                 children: [BluetoothIndicator(), BluetoothDevices()]

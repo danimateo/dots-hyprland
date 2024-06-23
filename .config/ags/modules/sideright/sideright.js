@@ -43,12 +43,12 @@ const centerWidgets = [
         materialIcon: 'bluetooth',
         contentWidget: ModuleBluetooth,
     },
-    {
-        name: 'Wifi networks',
-        materialIcon: 'wifi',
-        contentWidget: ModuleWifiNetworks,
-        onFocus: () => execAsync('nmcli dev wifi list').catch(print),
-    },
+    // {
+    //     name: 'Wifi networks',
+    //     materialIcon: 'wifi',
+    //     contentWidget: ModuleWifiNetworks,
+    //     onFocus: () => execAsync('nmcli dev wifi list').catch(print),
+    // },
     {
         name: 'Live config',
         materialIcon: 'tune',
@@ -120,14 +120,14 @@ const togglesBox = Widget.Box({
     hpack: 'center',
     className: 'sidebar-togglesbox spacing-h-5',
     children: [
-        ToggleIconWifi(),
+        // ToggleIconWifi(),
         ToggleIconBluetooth(),
         // await ModuleRawInput(),
         // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         await ModuleNightLight(),
         await ModuleInvertColors(),
-        ModuleIdleInhibitor(),
-        await ModuleCloudflareWarp(),
+        // ModuleIdleInhibitor(),
+        // await ModuleCloudflareWarp(),
     ]
 })
 
