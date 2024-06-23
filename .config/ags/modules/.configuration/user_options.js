@@ -103,7 +103,7 @@ let configOptions = {
             'allowNsfw': false,
         },
         'pages': {
-            'order': ["apis", "tools"],
+            'order': ["jobs", "apis", "tools"],
             'apis': {
                 'order': ["gpt", "gemini"],
             }
