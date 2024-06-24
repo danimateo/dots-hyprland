@@ -19,45 +19,37 @@ const JobEl = (job) => {
         maxWidthChars: 1,
         truncate: 'end',
         label: job.name,
-        className: 'txt-small',
+        className: 'txt-large',
       }),
     ],
   });
   const jobMicButton = ConfigToggle({
     vpack: 'center',
-    expandWidget: false,
+    expandWidget: true,
     desc: 'Toggle mic',
     name: 'Mic',
-    initValue: !job.muted,
+    initValue: JobService[`mic${job.jobIndex}`],
     onChange: (self, newValue) => {
-      JobService.setJobMic(job.jobIndex, newValue);
+      JobService[`mic${job.jobIndex}`] = newValue;
     },
     extraSetup: (self) =>
-      self.hook(
-        JobService,
-        (self) => {
-          self.enabled.value = !JobService.jobs.find((j) => j.jobIndex === job.jobIndex).muted;
-        },
-        'updated'
-      ),
+      self.hook(JobService, (self) => {
+        self.enabled.value = JobService[`mic${job.jobIndex}`];
+      }, 'values-updated'),
   });
   const jobBalanceButton = ConfigToggle({
     vpack: 'center',
-    expandWidget: false,
+    expandWidget: true,
     desc: 'Balance',
     name: 'Balance',
-    initValue: job.isBalanced,
+    initValue: JobService[`balance${job.jobIndex}`],
     onChange: (self, newValue) => {
-      JobService.setBalance(job.jobIndex);
+      JobService[`balance${job.jobIndex}`] = newValue;
     },
     extraSetup: (self) =>
-      self.hook(
-        JobService,
-        (self) => {
-          self.enabled.value = JobService.jobs.find((j) => j.jobIndex === job.jobIndex).isBalanced;
-        },
-        'updated'
-      ),
+      self.hook(JobService, (self) => {
+        self.enabled.value = JobService[`balance${job.jobIndex}`];
+      }, 'values-updated'),
   });
 
   function debounce(func, timeout = 300) {
@@ -71,28 +63,19 @@ const JobEl = (job) => {
   }
 
   const debouncedSetVolume = debounce((jobIndex, volume) => {
-    JobService.setVolume(jobIndex, volume);
+    JobService[`vol${jobIndex}`] = volume;
   });
 
   const jobVolumeSlider = Slider({
     drawValue: false,
     hpack: 'fill',
     className: 'sidebar-volmixer-stream-slider',
-    value: job.normalizedVolume / 100,
+    value: JobService.bind(`vol${job.jobIndex}`),
     min: 0,
     max: 1,
-    onChange: ({ value }) => {
-      debouncedSetVolume(job.jobIndex, Math.round(value * 100));
+    onChange: (self) => {
+      debouncedSetVolume(job.jobIndex, self.value);
     },
-    setup: (self) =>
-      self.hook(
-        JobService,
-        (self) => {
-          const normalizedVolume = JobService.jobs.find((j) => j.jobIndex === job.jobIndex).normalizedVolume;
-          self.value = normalizedVolume / 100;
-        },
-        'updated'
-      ),
   });
   return Box({
     className: 'sidebar-bluetooth-device spacing-h-10',
@@ -100,7 +83,7 @@ const JobEl = (job) => {
     children: [
       deviceStatus,
       Box({
-        className: 'spacing-h-5',
+        className: 'spacing-h-5 spacing-v-5',
         vertical: true,
         children: [jobMicButton, jobBalanceButton, jobVolumeSlider],
       }),
@@ -122,7 +105,14 @@ export const JobsModule = (props) => {
         },
         vertical: true,
         className: 'spacing-v-5 margin-bottom-15',
-        setup: (self) => self.hook(JobService, self.attribute.updateJobs, 'updated'),
+        setup: (self) =>
+          self.hook(JobService, self.attribute.updateJobs, 'updated').hook(
+            App,
+            (_self, windowName) => {
+              windowName === 'sideleft' && JobService.triggerUpdate();
+            },
+            'window-toggled'
+          ),
       }),
     }),
     overlays: [
