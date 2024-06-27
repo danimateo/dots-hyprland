@@ -99,6 +99,17 @@ export default ({
             }
         }, wholeThing);
     }
+
+    const destroyWithoutAnims = () => {
+        widget.sensitive = false;
+        command();
+        if (wholeThing) {
+            wholeThing.destroy();
+            wholeThing = null;
+        }
+    }
+
+
     const widget = EventBox({
         onMiddleClick: (self) => {
             destroyWithAnims();
@@ -128,6 +139,7 @@ export default ({
             'close': undefined,
             'hasBeenHovered': false,
             'destroyWithAnims': destroyWithAnims,
+            'destroyWithoutAnims': destroyWithoutAnims,
             'dragging': false,
             'held': false,
             'hovered': false,

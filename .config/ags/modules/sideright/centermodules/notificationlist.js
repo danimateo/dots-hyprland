@@ -34,7 +34,8 @@ export default (props) => {
         className: 'spacing-v-5-revealer',
         setup: (self) => self
             .hook(Notifications, (box, id) => {
-                const notifCount = box.get_children().length;
+                let notifCount = box.get_children().length;
+
                 if (notifCount === 0) { // On init there's no notif, or 1st notif
                     Notifications.notifications
                         .forEach(n => {
@@ -57,11 +58,11 @@ export default (props) => {
                     box.show_all();
                 }
 
+                notifCount = box.get_children().length;
+                const children = box.get_children();
                 if (notifCount > 5) {
-                    // destroy all but the last 5
-                    for (let i = 0; i < notifCount - 5; i++) {
-                        const kid = box.get_children()[i];
-                        Utils.timeout(userOptions.animations.choreographyDelay, () => kid.attribute.destroyWithAnims());
+                    for (let i = children.length - 1; i > 5; i--) {
+                        box.get_children()[box.get_children().length - 1]?.attribute.destroyWithoutAnims();
                     }
                 }
             }, 'notified')
