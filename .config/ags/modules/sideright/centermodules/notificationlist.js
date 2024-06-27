@@ -34,7 +34,8 @@ export default (props) => {
         className: 'spacing-v-5-revealer',
         setup: (self) => self
             .hook(Notifications, (box, id) => {
-                if (box.get_children().length == 0) { // On init there's no notif, or 1st notif
+                const notifCount = box.get_children().length;
+                if (notifCount === 0) { // On init there's no notif, or 1st notif
                     Notifications.notifications
                         .forEach(n => {
                             box.pack_end(Notification({
@@ -54,6 +55,14 @@ export default (props) => {
                 if (NewNotif) {
                     box.pack_end(NewNotif, false, false, 0);
                     box.show_all();
+                }
+
+                if (notifCount > 5) {
+                    // destroy all but the last 5
+                    for (let i = 0; i < notifCount - 5; i++) {
+                        const kid = box.get_children()[i];
+                        Utils.timeout(userOptions.animations.choreographyDelay, () => kid.attribute.destroyWithAnims());
+                    }
                 }
             }, 'notified')
             .hook(Notifications, (box, id) => {
@@ -106,7 +115,7 @@ export default (props) => {
             const kids = notificationList.get_children();
             for (let i = 0; i < kids.length; i++) {
                 const kid = kids[i];
-                Utils.timeout(userOptions.animations.choreographyDelay * i, () => kid.attribute.destroyWithAnims());
+                Utils.timeout(userOptions.animations.choreographyDelay, () => kid.attribute.destroyWithAnims());
             }
         })
     })
