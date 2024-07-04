@@ -4,7 +4,7 @@ getdate() {
     date '+%Y-%m-%d_%H.%M.%S'
 }
 getaudiooutput() {
-    pactl list sources | grep 'Name' | grep 'monitor' | cut -d ' ' -f2
+    pactl list sources | grep 'Name' | grep 'Combined.monitor' | cut -d ' ' -f2
 }
 getactivemonitor() {
     hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name'
